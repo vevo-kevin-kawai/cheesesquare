@@ -16,12 +16,11 @@
 
 package com.support.android.designlibdemo;
 
+import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.TextViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -69,6 +68,7 @@ public class CheeseListFragment extends Fragment {
         private final TypedValue mTypedValue = new TypedValue();
         private int mBackground;
         private List<String> mValues;
+        private MainActivity mMainActivity;
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
             public String mBoundString;
@@ -95,6 +95,7 @@ public class CheeseListFragment extends Fragment {
         }
 
         public SimpleStringRecyclerViewAdapter(Context context, List<String> items) {
+            mMainActivity = (MainActivity)context;
             context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
             mBackground = mTypedValue.resourceId;
             mValues = items;
@@ -116,11 +117,11 @@ public class CheeseListFragment extends Fragment {
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Context context = v.getContext();
-                    Intent intent = new Intent(context, CheeseDetailActivity.class);
-                    intent.putExtra(CheeseDetailActivity.EXTRA_NAME, holder.mBoundString);
-
-                    context.startActivity(intent);
+//                    Context context = v.getContext();
+//                    Intent intent = new Intent(context, CheeseDetailActivity.class);
+//                    intent.putExtra(CheeseDetailActivity.EXTRA_NAME, holder.mBoundString);
+//                    context.startActivity(intent);
+                    mMainActivity.startVideo();
                 }
             });
 

@@ -1,21 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    android:id="@+id/fl_container"
+<com.github.pedrovgs.DraggablePanel
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:draggable_panel="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <com.github.pedrovgs.DraggablePanel
-        android:id="@+id/draggable_panel"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        draggable_panel:enable_click_to_maximize_view="true"
-        draggable_panel:enable_horizontal_alpha_effect="false"
-        draggable_panel:top_fragment_height="@dimen/top_fragment_height"
-        draggable_panel:top_fragment_margin_bottom="@dimen/top_fragment_margin"
-        draggable_panel:top_fragment_margin_right="@dimen/top_fragment_margin"
-        draggable_panel:x_scale_factor="@dimen/x_scale_factor"
-        draggable_panel:y_scale_factor="@dimen/y_scale_factor"/>
-
-</FrameLayout>
+    android:id="@+id/draggable_panel"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    draggable_panel:enable_click_to_maximize_view="true"
+    draggable_panel:enable_horizontal_alpha_effect="false"
+    draggable_panel:top_fragment_height="@dimen/top_fragment_height"
+    draggable_panel:top_fragment_margin_bottom="@dimen/top_fragment_margin"
+    draggable_panel:top_fragment_margin_right="@dimen/top_fragment_margin"
+    draggable_panel:x_scale_factor="@dimen/x_scale_factor"
+    draggable_panel:y_scale_factor="@dimen/y_scale_factor"/>

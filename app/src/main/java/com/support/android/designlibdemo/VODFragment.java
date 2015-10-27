@@ -73,11 +73,14 @@ public class VODFragment extends Fragment {
     * Initialize and configure the DraggablePanel widget with two fragments and some attributes.
     */
    private void initializeDraggablePanel() {
+
+      TopVODFragment topFragment = new TopVODFragment();
+
       draggablePanel = (DraggablePanel) getView().findViewById(R.id.draggable_panel);
       draggablePanel.setVisibility(View.VISIBLE);
       draggablePanel.setFragmentManager(getFragmentManager());
-      draggablePanel.setTopFragment(youtubeFragment);
-      CheeseDetailFragmentTest moviePosterFragment = new CheeseDetailFragmentTest();
+      draggablePanel.setTopFragment(topFragment);
+      BottomVODFragment moviePosterFragment = new BottomVODFragment();
       draggablePanel.setBottomFragment(moviePosterFragment);
       draggablePanel.initializeView();
       draggablePanel.setClickToMaximizeEnabled(true);

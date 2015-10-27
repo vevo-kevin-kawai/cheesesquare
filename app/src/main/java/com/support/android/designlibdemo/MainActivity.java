@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
    @Override
    public boolean onOptionsItemSelected(MenuItem item) {
       Log.i("test", "test MainActivity onOptionsItemSelected: " + item.getItemId() + " android.R" +
-            ".id.home: " + android.R.id.home);
+              ".id.home: " + android.R.id.home);
       switch (item.getItemId()) {
          case android.R.id.home:
             if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
@@ -112,12 +112,26 @@ public class MainActivity extends AppCompatActivity {
       getSupportFragmentManager().beginTransaction().replace(R.id.alt_content, fragment, "test").addToBackStack("test").commit();
    }
 
+   public void startVideo() {
+      findViewById(R.id.video_content).setVisibility(View.VISIBLE);
+      Fragment fragment = getSupportFragmentManager().findFragmentByTag("test2");
+      if (fragment == null) {
+         fragment = new VODFragment();
+      }
+      getSupportFragmentManager().beginTransaction().replace(R.id.video_content, fragment, "test2").addToBackStack("test2").commit();
+   }
+
    @Override
    public void onBackPressed() {
 
       if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+
+         if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals("test")){
+            findViewById(R.id.alt_content).setVisibility(View.GONE);
+         } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals("test2")){
+            findViewById(R.id.video_content).setVisibility(View.GONE);
+         }
          getSupportFragmentManager().popBackStack();
-         findViewById(R.id.alt_content).setVisibility(View.GONE);
          reInit();
          Log.i("test", "test invalidateOptionsMenu called");
          return;
