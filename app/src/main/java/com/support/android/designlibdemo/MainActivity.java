@@ -30,12 +30,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,107 +43,143 @@ import java.util.List;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private DrawerLayout mDrawerLayout;
+   private DrawerLayout mDrawerLayout;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+   @Override
+   protected void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+      reInit();
 
-        final ActionBar ab = getSupportActionBar();
-        ab.setHomeAsUpIndicator(R.drawable.ic_menu);
-        ab.setDisplayHomeAsUpEnabled(true);
+      mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+      NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+      if (navigationView != null) {
+         setupDrawerContent(navigationView);
+      }
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        if (navigationView != null) {
-            setupDrawerContent(navigationView);
-        }
+      ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+      if (viewPager != null) {
+         setupViewPager(viewPager);
+      }
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        if (viewPager != null) {
-            setupViewPager(viewPager);
-        }
+      FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+      fab.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View view) {
+            Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+         }
+      });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+      TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+      tabLayout.setupWithViewPager(viewPager);
+   }
+
+   @Override
+   public boolean onCreateOptionsMenu(Menu menu) {
+      menu.clear();
+      getMenuInflater().inflate(R.menu.sample_actions, menu);
+      Log.i("test", "test onCreateOptionsMenu() called");
+      return true;
+   }
+
+   @Override
+   public boolean onOptionsItemSelected(MenuItem item) {
+      Log.i("test", "test MainActivity onOptionsItemSelected: " + item.getItemId() + " android.R" +
+            ".id.home: " + android.R.id.home);
+      switch (item.getItemId()) {
+         case android.R.id.home:
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+               onBackPressed();
+               return true;
             }
-        });
+            mDrawerLayout.openDrawer(GravityCompat.START);
+            return true;
+         case R.id.action_settings:
+            startNewFragment();
+            return true;
+      }
+      return super.onOptionsItemSelected(item);
+   }
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
-    }
+   private void startNewFragment() {
+      findViewById(R.id.alt_content).setVisibility(View.VISIBLE);
+      Fragment fragment = getSupportFragmentManager().findFragmentByTag("test");
+      if (fragment == null) {
+         fragment = new CheeseDetailFragmentTest();
+      }
+      getSupportFragmentManager().beginTransaction().replace(R.id.alt_content, fragment, "test").addToBackStack("test").commit();
+   }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.sample_actions, menu);
-        return true;
-    }
+   @Override
+   public void onBackPressed() {
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+      if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+         getSupportFragmentManager().popBackStack();
+         findViewById(R.id.alt_content).setVisibility(View.GONE);
+         reInit();
+         Log.i("test", "test invalidateOptionsMenu called");
+         return;
+      }
+      super.onBackPressed();
+   }
 
-    private void setupViewPager(ViewPager viewPager) {
-        Adapter adapter = new Adapter(getSupportFragmentManager());
-        adapter.addFragment(new CheeseListFragment(), "Category 1");
-        adapter.addFragment(new CheeseListFragment(), "Category 2");
-        adapter.addFragment(new CheeseListFragment(), "Category 3");
-        viewPager.setAdapter(adapter);
-    }
+   private void reInit() {
+      Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+      setSupportActionBar(toolbar);
 
-    private void setupDrawerContent(NavigationView navigationView) {
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
-                menuItem.setChecked(true);
-                mDrawerLayout.closeDrawers();
-                return true;
-            }
-        });
-    }
+      final ActionBar ab = getSupportActionBar();
+      ab.setHomeAsUpIndicator(R.drawable.ic_menu);
+      ab.setDisplayHomeAsUpEnabled(true);
+      invalidateOptionsMenu();
+   }
 
-    static class Adapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragments = new ArrayList<>();
-        private final List<String> mFragmentTitles = new ArrayList<>();
+   private void setupViewPager(ViewPager viewPager) {
+      Adapter adapter = new Adapter(getSupportFragmentManager());
+      adapter.addFragment(new CheeseListFragment(), "Category 1");
+      adapter.addFragment(new CheeseListFragment(), "Category 2");
+      adapter.addFragment(new CheeseListFragment(), "Category 3");
+      viewPager.setAdapter(adapter);
+   }
 
-        public Adapter(FragmentManager fm) {
-            super(fm);
-        }
+   private void setupDrawerContent(NavigationView navigationView) {
+      navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+         @Override
+         public boolean onNavigationItemSelected(MenuItem menuItem) {
+            menuItem.setChecked(true);
+            mDrawerLayout.closeDrawers();
+            return true;
+         }
+      });
+   }
 
-        public void addFragment(Fragment fragment, String title) {
-            mFragments.add(fragment);
-            mFragmentTitles.add(title);
-        }
+   static class Adapter extends FragmentPagerAdapter {
+      private final List<Fragment> mFragments = new ArrayList<>();
+      private final List<String> mFragmentTitles = new ArrayList<>();
 
-        @Override
-        public Fragment getItem(int position) {
-            return mFragments.get(position);
-        }
+      public Adapter(FragmentManager fm) {
+         super(fm);
+      }
 
-        @Override
-        public int getCount() {
-            return mFragments.size();
-        }
+      public void addFragment(Fragment fragment, String title) {
+         mFragments.add(fragment);
+         mFragmentTitles.add(title);
+      }
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitles.get(position);
-        }
-    }
+      @Override
+      public Fragment getItem(int position) {
+         return mFragments.get(position);
+      }
+
+      @Override
+      public int getCount() {
+         return mFragments.size();
+      }
+
+      @Override
+      public CharSequence getPageTitle(int position) {
+         return mFragmentTitles.get(position);
+      }
+   }
 }
