@@ -44,14 +44,14 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
    private DrawerLayout mDrawerLayout;
+   private VODFragment mVODFragment;
+   private CheeseDetailFragmentTest mAltFragment;
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_main);
-
-      reInit();
-
+      setupToolbar();
       mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
       NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -90,9 +90,18 @@ public class MainActivity extends AppCompatActivity {
               ".id.home: " + android.R.id.home);
       switch (item.getItemId()) {
          case android.R.id.home:
-            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-               onBackPressed();
+
+            if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+               mDrawerLayout.closeDrawer(GravityCompat.START);
                return true;
+            }
+
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+               if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(FRAGMENT_ALT)){
+                  findViewById(R.id.alt_content).setVisibility(View.GONE);
+                  onBackPressed();
+                  return true;
+               }
             }
             mDrawerLayout.openDrawer(GravityCompat.START);
             return true;
@@ -103,43 +112,53 @@ public class MainActivity extends AppCompatActivity {
       return super.onOptionsItemSelected(item);
    }
 
+   private static final String FRAGMENT_ALT = "alt_frag";
+   private static final String FRAGMENT_VID = "vid_frag";
+
    private void startNewFragment() {
       findViewById(R.id.alt_content).setVisibility(View.VISIBLE);
-      Fragment fragment = getSupportFragmentManager().findFragmentByTag("test");
+      Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_ALT);
       if (fragment == null) {
          fragment = new CheeseDetailFragmentTest();
+         mAltFragment = (CheeseDetailFragmentTest)fragment;
       }
-      getSupportFragmentManager().beginTransaction().replace(R.id.alt_content, fragment, "test").addToBackStack("test").commit();
+      getSupportFragmentManager().beginTransaction().replace(R.id.alt_content, fragment, FRAGMENT_ALT).addToBackStack(FRAGMENT_ALT).commit();
    }
 
    public void startVideo() {
       findViewById(R.id.video_content).setVisibility(View.VISIBLE);
-      Fragment fragment = getSupportFragmentManager().findFragmentByTag("test2");
+      Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_VID);
       if (fragment == null) {
          fragment = new VODFragment();
+         mVODFragment = (VODFragment)fragment;
       }
-      getSupportFragmentManager().beginTransaction().replace(R.id.video_content, fragment, "test2").addToBackStack("test2").commit();
+      getSupportFragmentManager().beginTransaction().replace(R.id.video_content, fragment, FRAGMENT_VID).addToBackStack(FRAGMENT_VID).commit();
    }
 
    @Override
    public void onBackPressed() {
 
+      if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+         mDrawerLayout.closeDrawer(GravityCompat.START);
+         return;
+      }
+
       if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
 
-         if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals("test")){
+         if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(FRAGMENT_ALT)){
             findViewById(R.id.alt_content).setVisibility(View.GONE);
-         } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals("test2")){
+         } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(FRAGMENT_VID)){
             findViewById(R.id.video_content).setVisibility(View.GONE);
          }
          getSupportFragmentManager().popBackStack();
-         reInit();
+         setupToolbar();
          Log.i("test", "test invalidateOptionsMenu called");
          return;
       }
       super.onBackPressed();
    }
 
-   private void reInit() {
+   private void setupToolbar() {
       Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
       setSupportActionBar(toolbar);
 

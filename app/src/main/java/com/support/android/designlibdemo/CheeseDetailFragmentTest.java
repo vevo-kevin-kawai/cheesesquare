@@ -32,7 +32,7 @@ public class CheeseDetailFragmentTest extends Fragment {
 
    @Override
    public void onActivityCreated(Bundle savedInstanceState) {
-      super.onCreate(savedInstanceState);
+      super.onActivityCreated(savedInstanceState);
 
       final String cheeseName = "Blue Cheese Test";
 
