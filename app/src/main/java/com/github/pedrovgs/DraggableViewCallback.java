@@ -31,9 +31,9 @@ class DraggableViewCallback extends ViewDragHelper.Callback {
      private static final float X_MIN_VELOCITY = 1500;
      private static final float Y_MIN_VELOCITY = 1000;
     */
-   private static final int MINIMUM_DX_FOR_HORIZONTAL_DRAG = 15;
-   private static final int MINIMUM_DY_FOR_VERTICAL_DRAG = 5;
-   private static final float X_MIN_VELOCITY = 500;
+   private static final int MINIMUM_DX_FOR_HORIZONTAL_DRAG = 25;
+   private static final int MINIMUM_DY_FOR_VERTICAL_DRAG = 10;
+   private static final float X_MIN_VELOCITY = 800;
    private static final float Y_MIN_VELOCITY = 500;
 
    private DraggableView draggableView;
