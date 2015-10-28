@@ -271,6 +271,9 @@ public class DraggablePanel extends FrameLayout {
       draggableView.setTouchEnabled(enableTouchListener);
    }
 
+   public void test() {
+   }
+
    /**
     * Checks if the top Fragment is maximized.
     *
