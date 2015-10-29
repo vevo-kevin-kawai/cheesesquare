@@ -1,7 +1,9 @@
 package com.support.android.designlibdemo;
 
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -35,6 +37,7 @@ public class VODFragment extends Fragment {
     }
 
     private void adjustByConfiguration(final int orientation) {
+
         if (!IS_ADJUST_ON_CONFIG_CHANGE)
             return;
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -43,13 +46,24 @@ public class VODFragment extends Fragment {
             mDraggablePanel.getDraggableView().setTouchEnabled(false);
             mDraggablePanel.setClickToMaximizeEnabled(false);
             mDraggablePanel.maximize();
-            Log.i("test","adjustByConfiguration() landscape");
+            Log.i("test", "VODFragment.adjustByConfiguration() landscape");
         } else {
             mDraggablePanel.getDraggableView().setTopViewHeight(ScreenUtil.getPortraitVideoHeight(getActivity()));
             mDraggablePanel.getDraggableView().getBottomView().setVisibility(View.VISIBLE);
             mDraggablePanel.getDraggableView().setTouchEnabled(true);
             mDraggablePanel.setClickToMaximizeEnabled(true);
-            Log.i("test", "adjustByConfiguration() portrait");
+            Log.i("test", "VODFragment.adjustByConfiguration() portrait");
+            if (isMinimizedInPortrait) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (getActivity() == null || mDraggablePanel.isMinimized()) {
+                            return;
+                        }
+                        mDraggablePanel.minimize();
+                    }
+                },250);
+            }
         }
     }
 
@@ -77,11 +91,15 @@ public class VODFragment extends Fragment {
             @Override
             public void onMaximized() {
                 //Log.i("test", "onMaximized(): minimized: " + mDraggablePanel.isMinimized() + " maximized: " + mDraggablePanel.isMaximized() + " click enabled:" + mDraggablePanel.isClickToMaximizeEnabled());
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    isMinimizedInPortrait = false;
+                }
             }
 
             @Override
             public void onMinimized() {
                 //Log.i("test", "onMinimized(): minimized: " + mDraggablePanel.isMinimized() + " maximized: " + mDraggablePanel.isMaximized() + " click enabled:" + mDraggablePanel.isClickToMaximizeEnabled());
+                isMinimizedInPortrait = true;
             }
 
             @Override
@@ -98,11 +116,12 @@ public class VODFragment extends Fragment {
         });
     }
 
+    private boolean isMinimizedInPortrait;
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Log.i("test", "onConfigurationChanged: " + (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? "landscape" : "portrait"));
-
         final View top = mDraggablePanel.getDraggableView().getTopView();
         final View bottom = mDraggablePanel.getDraggableView().getBottomView();
         final Transformer transformer = mDraggablePanel.getDraggableView().getTransformer();

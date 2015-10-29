@@ -18,6 +18,7 @@ package com.github.pedrovgs;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -447,11 +448,17 @@ public class DraggableView extends RelativeLayout {
         }
 
         if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            Log.i("test", "DraggableView.onLayout portrait");
+            Log.i("test", "DraggableView.onLayout() portrait");
         } else {
-            Log.i("test", "DraggableView.onLayout landscape");
+            Log.i("test", "DraggableView.onLayout() landscape");
             dragView.layout(left, top, right, ScreenUtil.getScreenHeight(getContext()));
         }
+    }
+
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Log.i("test", "DraggableView.onConfigurationChanged() " + (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? "landscape" : "portrait"));
     }
 
     /**
