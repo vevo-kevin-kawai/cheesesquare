@@ -38,16 +38,18 @@ public class VODFragment extends Fragment {
         if (!IS_ADJUST_ON_CONFIG_CHANGE)
             return;
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            mDraggablePanel.maximize();
             mDraggablePanel.getDraggableView().setTopViewHeight(ScreenUtil.getScreenHeight(getActivity()));
             mDraggablePanel.getDraggableView().getBottomView().setVisibility(View.GONE);
             mDraggablePanel.getDraggableView().setTouchEnabled(false);
             mDraggablePanel.setClickToMaximizeEnabled(false);
+            mDraggablePanel.maximize();
+            Log.i("test","adjustByConfiguration() landscape");
         } else {
             mDraggablePanel.getDraggableView().setTopViewHeight(ScreenUtil.getPortraitVideoHeight(getActivity()));
             mDraggablePanel.getDraggableView().getBottomView().setVisibility(View.VISIBLE);
             mDraggablePanel.getDraggableView().setTouchEnabled(true);
             mDraggablePanel.setClickToMaximizeEnabled(true);
+            Log.i("test", "adjustByConfiguration() portrait");
         }
     }
 
@@ -74,12 +76,12 @@ public class VODFragment extends Fragment {
         mDraggablePanel.setDraggableListener(new DraggableListener() {
             @Override
             public void onMaximized() {
-                Log.i("test", "onMaximized(): minimized: " + mDraggablePanel.isMinimized() + " maximized: " + mDraggablePanel.isMaximized() + " click enabled:" + mDraggablePanel.isClickToMaximizeEnabled());
+                //Log.i("test", "onMaximized(): minimized: " + mDraggablePanel.isMinimized() + " maximized: " + mDraggablePanel.isMaximized() + " click enabled:" + mDraggablePanel.isClickToMaximizeEnabled());
             }
 
             @Override
             public void onMinimized() {
-                Log.i("test", "onMinimized(): minimized: " + mDraggablePanel.isMinimized() + " maximized: " + mDraggablePanel.isMaximized() + " click enabled:" + mDraggablePanel.isClickToMaximizeEnabled());
+                //Log.i("test", "onMinimized(): minimized: " + mDraggablePanel.isMinimized() + " maximized: " + mDraggablePanel.isMaximized() + " click enabled:" + mDraggablePanel.isClickToMaximizeEnabled());
             }
 
             @Override

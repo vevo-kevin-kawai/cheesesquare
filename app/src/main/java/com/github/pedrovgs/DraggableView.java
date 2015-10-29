@@ -25,6 +25,7 @@ import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -33,6 +34,7 @@ import com.github.pedrovgs.transformer.Transformer;
 import com.github.pedrovgs.transformer.TransformerFactory;
 import com.nineoldandroids.view.ViewHelper;
 import com.support.android.designlibdemo.R;
+import com.support.android.designlibdemo.ScreenUtil;
 
 /**
  * Class created to extends a ViewGroup and simulate the YoutubeLayoutComponent
@@ -432,6 +434,7 @@ public class DraggableView extends RelativeLayout {
      */
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+
         if (isInEditMode())
             super.onLayout(changed, left, top, right, bottom);
         else if (isDragViewAtTop()) {
@@ -440,7 +443,14 @@ public class DraggableView extends RelativeLayout {
             ViewHelper.setY(dragView, top);
             ViewHelper.setY(secondView, transformer.getOriginalHeight());
         } else {
-            secondView.layout(left, transformer.getOriginalHeight(), right, bottom);
+           secondView.layout(left, transformer.getOriginalHeight(), right, bottom);
+        }
+
+        if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Log.i("test", "DraggableView.onLayout portrait");
+        } else {
+            Log.i("test", "DraggableView.onLayout landscape");
+            dragView.layout(left, top, right, ScreenUtil.getScreenHeight(getContext()));
         }
     }
 
