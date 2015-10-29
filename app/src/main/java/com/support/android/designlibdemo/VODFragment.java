@@ -11,12 +11,14 @@ import android.view.ViewGroup;
 
 import com.github.pedrovgs.DraggableListener;
 import com.github.pedrovgs.DraggablePanel;
+import com.github.pedrovgs.transformer.Transformer;
 
 /**
  * Created by kkawai on 10/26/15.
  */
 public class VODFragment extends Fragment {
 
+   private static final boolean IS_ADJUST_ON_CONFIG_CHANGE=false;
    private DraggablePanel mDraggablePanel;
 
    @Nullable
@@ -29,6 +31,23 @@ public class VODFragment extends Fragment {
    public void onActivityCreated(Bundle savedInstanceState) {
       super.onActivityCreated(savedInstanceState);
       initializeDraggablePanel();
+      adjustConfigurationChange(getResources().getConfiguration().orientation);
+   }
+
+   private void adjustConfigurationChange(final int orientation) {
+      if (!IS_ADJUST_ON_CONFIG_CHANGE)
+         return;
+      if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+         mDraggablePanel.getDraggableView().setTopViewHeight(ScreenUtil.getScreenHeight(getActivity()));
+         mDraggablePanel.getDraggableView().getBottomView().setVisibility(View.GONE);
+         mDraggablePanel.getDraggableView().setTouchEnabled(false);
+         mDraggablePanel.setClickToMaximizeEnabled(false);
+      } else {
+         mDraggablePanel.getDraggableView().setTopViewHeight(ScreenUtil.getPortraitVideoHeight(getActivity()));
+         mDraggablePanel.getDraggableView().getBottomView().setVisibility(View.VISIBLE);
+         mDraggablePanel.getDraggableView().setTouchEnabled(true);
+         mDraggablePanel.setClickToMaximizeEnabled(true);
+      }
    }
 
    /**
@@ -77,6 +96,14 @@ public class VODFragment extends Fragment {
    @Override
    public void onConfigurationChanged(Configuration newConfig) {
       super.onConfigurationChanged(newConfig);
-      Log.i("test","onConfigurationChanged: " + (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? "landscape" : "portrait"));
+      Log.i("test", "onConfigurationChanged: " + (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? "landscape" : "portrait"));
+
+      final View top = mDraggablePanel.getDraggableView().getTopView();
+      final View bottom = mDraggablePanel.getDraggableView().getBottomView();
+      final Transformer transformer = mDraggablePanel.getDraggableView().getTransformer();
+      final int screenHeight = ScreenUtil.getScreenHeight(getActivity());
+      final int screenWidth=ScreenUtil.getScreenWidth(getActivity());
+      adjustConfigurationChange(newConfig.orientation);
+      Log.i("test","top: "+top.getMeasuredWidth() + "/" + top.getMeasuredHeight() + " bottom: "+bottom.getMeasuredWidth() + "/" + bottom.getMeasuredHeight() + " screenHeight: "+screenHeight);
    }
 }

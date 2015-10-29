@@ -348,4 +348,8 @@ public class DraggablePanel extends FrameLayout {
          throw new IllegalStateException("You have to set top and bottom fragment before initialize DraggablePanel");
       }
    }
+
+   public DraggableView getDraggableView() {
+      return draggableView;
+   }
 }
