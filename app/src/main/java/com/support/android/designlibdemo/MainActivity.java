@@ -43,6 +43,9 @@ import java.util.List;
  */
 public class MainActivity extends AppCompatActivity {
 
+   private static final String FRAGMENT_ALT = "alt_frag";
+   private static final String FRAGMENT_VOD = "vod_frag";
+
    private DrawerLayout mDrawerLayout;
    private VODFragment mVODFragment;
    private CheeseDetailFragmentTest mAltFragment;
@@ -112,9 +115,6 @@ public class MainActivity extends AppCompatActivity {
       return super.onOptionsItemSelected(item);
    }
 
-   private static final String FRAGMENT_ALT = "alt_frag";
-   private static final String FRAGMENT_VID = "vid_frag";
-
    private void startNewFragment() {
       findViewById(R.id.alt_content).setVisibility(View.VISIBLE);
       Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_ALT);
@@ -127,12 +127,18 @@ public class MainActivity extends AppCompatActivity {
 
    public void startVideo() {
       findViewById(R.id.video_content).setVisibility(View.VISIBLE);
-      Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_VID);
+      Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_VOD);
       if (fragment == null) {
          fragment = new VODFragment();
          mVODFragment = (VODFragment)fragment;
       }
-      getSupportFragmentManager().beginTransaction().replace(R.id.video_content, fragment, FRAGMENT_VID).addToBackStack(FRAGMENT_VID).commit();
+      getSupportFragmentManager().beginTransaction().replace(R.id.video_content, fragment, FRAGMENT_VOD).commit();
+   }
+
+   public void closeVOD() {
+      findViewById(R.id.video_content).setVisibility(View.GONE);
+      getSupportFragmentManager().beginTransaction().remove(mVODFragment).commit();
+      mVODFragment = null;
    }
 
    @Override
@@ -144,15 +150,14 @@ public class MainActivity extends AppCompatActivity {
       }
 
       if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-
-         if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(FRAGMENT_ALT)){
-            findViewById(R.id.alt_content).setVisibility(View.GONE);
-         } else if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount()-1).getName().equals(FRAGMENT_VID)){
-            findViewById(R.id.video_content).setVisibility(View.GONE);
-         }
+         findViewById(R.id.alt_content).setVisibility(View.GONE);
          getSupportFragmentManager().popBackStack();
          setupToolbar();
-         Log.i("test", "test invalidateOptionsMenu called");
+         return;
+      }
+
+      if (mVODFragment != null && mVODFragment.getDraggablePanel().isMaximized()) {
+         closeVOD();
          return;
       }
       super.onBackPressed();
