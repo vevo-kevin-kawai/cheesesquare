@@ -47,6 +47,8 @@ public class VODFragment extends Fragment {
             mDraggablePanel.setClickToMaximizeEnabled(false);
             mDraggablePanel.maximize();
             Log.i("test", "VODFragment.adjustByConfiguration() landscape");
+
+            ScreenUtil.hideSystemUI(getActivity().getWindow());
         } else {
             mDraggablePanel.getDraggableView().setTopViewHeight(ScreenUtil.getPortraitVideoHeight(getActivity()));
             mDraggablePanel.getDraggableView().getBottomView().setVisibility(View.VISIBLE);
@@ -61,8 +63,11 @@ public class VODFragment extends Fragment {
                             return;
                         }
                         mDraggablePanel.minimize();
+                        ScreenUtil.showSystemUI(getActivity().getWindow());
                     }
                 },250);
+            } else {
+                ScreenUtil.showSystemUI(getActivity().getWindow());
             }
         }
     }
