@@ -820,4 +820,9 @@ public class DraggableView extends RelativeLayout {
     public Transformer getTransformer() {
         return transformer;
     }
+
+    private boolean isPortrait() {
+        return getContext().getResources().getConfiguration().orientation == Configuration
+              .ORIENTATION_PORTRAIT;
+    }
 }
