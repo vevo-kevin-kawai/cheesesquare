@@ -81,7 +81,7 @@ public class VODFragment extends Fragment {
         mDraggablePanel = (DraggablePanel) getView().findViewById(R.id.draggable_panel);
         mDraggablePanel.setClickToMaximizeEnabled(true);
         mDraggablePanel.setVisibility(View.VISIBLE);
-        mDraggablePanel.setFragmentManager(getChildFragmentManager());
+        mDraggablePanel.setFragmentManager(getFragmentManager());
         setupDraggablePanelListener();
         mDraggablePanel.setTopFragment(topFragment);
 
@@ -126,14 +126,12 @@ public class VODFragment extends Fragment {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Log.i("test", "onConfigurationChanged: " + (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? "landscape" : "portrait"));
         final View top = mDraggablePanel.getDraggableView().getTopView();
         final View bottom = mDraggablePanel.getDraggableView().getBottomView();
         final Transformer transformer = mDraggablePanel.getDraggableView().getTransformer();
         final int screenHeight = ScreenUtil.getScreenHeight(getActivity());
         final int screenWidth = ScreenUtil.getScreenWidth(getActivity());
         adjustByConfiguration(newConfig.orientation);
-        Log.i("test", "top: " + top.getMeasuredWidth() + "/" + top.getMeasuredHeight() + " bottom: " + bottom.getMeasuredWidth() + "/" + bottom.getMeasuredHeight() + " screenHeight: " + screenHeight);
 
     }
 
