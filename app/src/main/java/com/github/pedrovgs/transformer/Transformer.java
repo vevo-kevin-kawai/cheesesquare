@@ -94,6 +94,7 @@ public abstract class Transformer {
       RelativeLayout.LayoutParams layoutParams =
           (RelativeLayout.LayoutParams) view.getLayoutParams();
       layoutParams.height = newHeight;
+      layoutParams.width = -1;
       view.setLayoutParams(layoutParams);
     }
   }
