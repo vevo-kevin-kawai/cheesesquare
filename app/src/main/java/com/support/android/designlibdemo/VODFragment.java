@@ -48,29 +48,9 @@ public class VODFragment extends Fragment {
 
          if (isMinimizedInPortrait) {
 
-            new Handler().postDelayed(new Runnable() {
-               @Override
-               public void run() {
-                  if (getActivity() == null) {
-                     return;
-                  }
-                  mDraggablePanel.maximize();
+            mDraggablePanel.maximizeFast();
+            mDraggablePanel.setFullScreen(true);
 
-                  new Handler().postDelayed(new Runnable() {
-                     @Override
-                     public void run() {
-                        if (getActivity() == null) {
-                           return;
-                        }
-                        mDraggablePanel.setFullScreen(true);
-                        Log.i("test", "VODFragment.adjustByConfiguration() landscape.  WAS previously minimized. " + isMinimizedInPortrait);
-
-                     }
-                  }, 500);
-
-
-               }
-            }, 250);
          } else {
             Log.i("test", "VODFragment.adjustByConfiguration() landscape.  was not previously minimized. " + isMinimizedInPortrait);
             mDraggablePanel.setFullScreen(true);
@@ -81,15 +61,7 @@ public class VODFragment extends Fragment {
          ScreenUtil.showSystemUI(getActivity().getWindow());
          mDraggablePanel.setFullScreen(false);
          if (isMinimizedInPortrait) {
-            new Handler().postDelayed(new Runnable() {
-               @Override
-               public void run() {
-                  if (getActivity() == null || mDraggablePanel.isMinimized()) {
-                     return;
-                  }
-                  mDraggablePanel.minimize();
-               }
-            }, 250);
+            mDraggablePanel.minimizeFast();
          }
       }
    }

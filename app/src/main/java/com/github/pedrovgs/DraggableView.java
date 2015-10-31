@@ -24,7 +24,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -71,7 +70,7 @@ public class DraggableView extends RelativeLayout {
   private TypedArray attributes;
 
   private FragmentManager fragmentManager;
-  private ViewDragHelper viewDragHelper;
+  private MyViewDragHelper viewDragHelper;
   private Transformer transformer;
 
   private boolean enableHorizontalAlphaEffect;
@@ -273,6 +272,11 @@ public class DraggableView extends RelativeLayout {
     notifyMaximizeToListener();
   }
 
+  public void maximizeFast() {
+    smoothSlideTo(SLIDE_TOP,false);
+    notifyMaximizeToListener();
+  }
+
   /**
    * Minimize the custom view applying an animation to put the top fragment on the bottom right
    * corner of the screen.
@@ -281,6 +285,11 @@ public class DraggableView extends RelativeLayout {
     //if (!isDragViewAtBottom())
       smoothSlideTo(SLIDE_BOTTOM);
     notifyMinimizeToListener();
+  }
+
+  public void minimizeFast() {
+      smoothSlideTo(SLIDE_BOTTOM,false);
+      notifyMinimizeToListener();
   }
 
   /**
@@ -760,7 +769,7 @@ public class DraggableView extends RelativeLayout {
    */
   private void initializeViewDragHelper() {
     viewDragHelper =
-        ViewDragHelper.create(this, SENSITIVITY, new DraggableViewCallback(this, dragView));
+            MyViewDragHelper.create(this, SENSITIVITY, new DraggableViewCallback(this, dragView));
   }
 
   /**
@@ -814,17 +823,21 @@ public class DraggableView extends RelativeLayout {
    * @param slideOffset to apply
    * @return true if the view is slided.
    */
-  private boolean smoothSlideTo(float slideOffset) {
+  private boolean smoothSlideTo(float slideOffset, final boolean isAnimate) {
     final int topBound = getPaddingTop();
     int x = (int) (slideOffset * (getWidth() - transformer.getMinWidthPlusMarginRight()));
     Log.e("drview",
             "minimise " + x + " + " + transformer.getMinWidthPlusMarginRight() + " = " + getWidth());
     int y = (int) (topBound + slideOffset * getVerticalDragRange());
-    if (viewDragHelper.smoothSlideViewTo(dragView, 0, y)) {
+    if (viewDragHelper.smoothSlideViewTo(dragView, 0, y, isAnimate)) {
       ViewCompat.postInvalidateOnAnimation(this);
       return true;
     }
     return false;
+  }
+
+  private boolean smoothSlideTo(float slideOffset) {
+    return smoothSlideTo(slideOffset,true);
   }
 
   /**

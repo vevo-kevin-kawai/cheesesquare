@@ -24,7 +24,7 @@ import android.view.View;
  *
  * @author Pedro Vicente Gómez Sánchez.
  */
-class DraggableViewCallback extends ViewDragHelper.Callback {
+class DraggableViewCallback extends MyViewDragHelper.Callback {
    /*
      private static final int MINIMUM_DX_FOR_HORIZONTAL_DRAG = 5;
      private static final int MINIMUM_DY_FOR_VERTICAL_DRAG = 15;

@@ -269,6 +269,10 @@ public class DraggablePanel extends FrameLayout {
     draggableView.maximize();
   }
 
+  public void maximizeFast() {
+    draggableView.maximizeFast();
+  }
+
   /**
    * Minimize the custom view applying an animation to put the top fragment on the bottom right
    * corner of the screen.
@@ -277,6 +281,9 @@ public class DraggablePanel extends FrameLayout {
     draggableView.minimize();
   }
 
+  public void minimizeFast() {
+    draggableView.minimizeFast();
+  }
   /**
    * Apply all the custom view configuration and inflate the main widgets. The view won't be
    * visible if this method is not called.
