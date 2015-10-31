@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Note: top_fragment_height will be dynamically set via ScreenUtil.getPortraitVideoHeight() -->
 <com.github.pedrovgs.DraggablePanel
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:draggable_panel="http://schemas.android.com/apk/res-auto"
@@ -6,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     draggable_panel:enable_horizontal_alpha_effect="true"
-    draggable_panel:top_fragment_height="@dimen/top_fragment_height"
+    draggable_panel:top_fragment_height="-2px"
     draggable_panel:top_fragment_margin_bottom="@dimen/top_fragment_margin"
     draggable_panel:top_fragment_margin_right="@dimen/top_fragment_margin"
     draggable_panel:x_scale_factor="@dimen/x_scale_factor"

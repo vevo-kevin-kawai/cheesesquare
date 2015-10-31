@@ -17,6 +17,7 @@
 package com.support.android.designlibdemo;
 
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -77,6 +78,12 @@ public class MainActivity extends AppCompatActivity {
 
       TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
       tabLayout.setupWithViewPager(viewPager);
+   }
+
+   @Override
+   public void onSaveInstanceState(Bundle outState) {
+      super.onSaveInstanceState(outState);
+      Log.i("test","MainActivity.onSaveInstanceState()");
    }
 
    @Override

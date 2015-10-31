@@ -23,6 +23,7 @@ import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
 import com.support.android.designlibdemo.R;
+import com.support.android.designlibdemo.ScreenUtil;
 
 /**
  * Custom view created to handle DraggableView using fragments. With this custom view the client
@@ -348,9 +349,9 @@ public class DraggablePanel extends FrameLayout {
    */
   private void initializeAttrs(AttributeSet attrs) {
     TypedArray attributes = getContext().obtainStyledAttributes(attrs, R.styleable.draggable_panel);
-    this.topFragmentHeight =
-        attributes.getDimensionPixelSize(R.styleable.draggable_panel_top_fragment_height,
-            DEFAULT_TOP_FRAGMENT_HEIGHT);
+    this.topFragmentHeight = ScreenUtil.getPortraitVideoHeight(getContext());
+        //attributes.getDimensionPixelSize(R.styleable.draggable_panel_top_fragment_height,
+        //    DEFAULT_TOP_FRAGMENT_HEIGHT);
     this.xScaleFactor =
         attributes.getFloat(R.styleable.draggable_panel_x_scale_factor, DEFAULT_SCALE_FACTOR);
     this.yScaleFactor =

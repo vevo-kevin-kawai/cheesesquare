@@ -9,11 +9,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import com.github.pedrovgs.DraggableListener;
 import com.github.pedrovgs.DraggablePanel;
-import com.github.pedrovgs.transformer.Transformer;
 
 /**
  * Created by kkawai on 10/26/15.
@@ -47,17 +45,9 @@ public class VODFragment extends Fragment {
       if (!IS_ADJUST_ON_CONFIG_CHANGE)
          return;
       if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-//         mDraggablePanel.getDraggableView().getBottomView().setVisibility(View.GONE);
-//         final FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) mDraggablePanel.getDraggableView().getLayoutParams();
-//         //params.width = FrameLayout.LayoutParams.MATCH_PARENT;
-//         params.height = FrameLayout.LayoutParams.MATCH_PARENT;
-//         mDraggablePanel.getDraggableView().setLayoutParams(params);
-//         mDraggablePanel.getDraggableView().requestLayout();
-//         mDraggablePanel.getDraggableView().setTopViewHeight(ScreenUtil.getScreenHeight(getActivity()));
-//         mDraggablePanel.getDraggableView().setTouchEnabled(false);
-//         mDraggablePanel.setClickToMaximizeEnabled(false);
 
-         if (mDraggablePanel.isMinimized()) {
+         if (isMinimizedInPortrait) {
+
             new Handler().postDelayed(new Runnable() {
                @Override
                public void run() {
@@ -73,6 +63,7 @@ public class VODFragment extends Fragment {
                            return;
                         }
                         mDraggablePanel.setFullScreen(true);
+                        Log.i("test", "VODFragment.adjustByConfiguration() landscape.  WAS previously minimized. " + isMinimizedInPortrait);
 
                      }
                   }, 500);
@@ -81,27 +72,14 @@ public class VODFragment extends Fragment {
                }
             }, 250);
          } else {
+            Log.i("test", "VODFragment.adjustByConfiguration() landscape.  was not previously minimized. " + isMinimizedInPortrait);
             mDraggablePanel.setFullScreen(true);
          }
-
-         Log.i("test", "VODFragment.adjustByConfiguration() landscape");
-
          ScreenUtil.hideSystemUI(getActivity().getWindow());
+
       } else {
          ScreenUtil.showSystemUI(getActivity().getWindow());
          mDraggablePanel.setFullScreen(false);
-//         final FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) mDraggablePanel.getDraggableView().getLayoutParams();
-//         //         params.width = FrameLayout.LayoutParams.MATCH_PARENT;
-//         params.height = -1;
-//         mDraggablePanel.getDraggableView().setLayoutParams(params);
-//         mDraggablePanel.getDraggableView().requestLayout();
-//
-//         mDraggablePanel.setTopViewHeight(ScreenUtil.getPortraitVideoHeight(getActivity()));
-//         mDraggablePanel.getDraggableView().setTopViewHeight(ScreenUtil.getPortraitVideoHeight(getActivity()));
-//         mDraggablePanel.getDraggableView().getBottomView().setVisibility(View.VISIBLE);
-//         mDraggablePanel.getDraggableView().setTouchEnabled(true);
-//         mDraggablePanel.setClickToMaximizeEnabled(true);
-//         Log.i("test", "VODFragment.adjustByConfiguration() portrait");
          if (isMinimizedInPortrait) {
             new Handler().postDelayed(new Runnable() {
                @Override
