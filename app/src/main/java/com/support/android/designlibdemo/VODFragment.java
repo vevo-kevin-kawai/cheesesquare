@@ -36,36 +36,72 @@ public class VODFragment extends Fragment {
       adjustByConfiguration(getResources().getConfiguration().orientation);
    }
 
+   @Override
+   public void onSaveInstanceState(Bundle outState) {
+      super.onSaveInstanceState(outState);
+      Log.i("test", "VODFragment.onSaveInstanceState()");
+   }
+
    private void adjustByConfiguration(final int orientation) {
 
       if (!IS_ADJUST_ON_CONFIG_CHANGE)
          return;
       if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-         mDraggablePanel.getDraggableView().getBottomView().setVisibility(View.GONE);
-         final FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) mDraggablePanel.getDraggableView().getLayoutParams();
-         //params.width = FrameLayout.LayoutParams.MATCH_PARENT;
-         params.height = FrameLayout.LayoutParams.MATCH_PARENT;
-         mDraggablePanel.getDraggableView().setLayoutParams(params);
-         mDraggablePanel.getDraggableView().requestLayout();
-         mDraggablePanel.getDraggableView().setTopViewHeight(ScreenUtil.getScreenHeight(getActivity()));
-         mDraggablePanel.getDraggableView().setTouchEnabled(false);
-         mDraggablePanel.setClickToMaximizeEnabled(false);
+//         mDraggablePanel.getDraggableView().getBottomView().setVisibility(View.GONE);
+//         final FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) mDraggablePanel.getDraggableView().getLayoutParams();
+//         //params.width = FrameLayout.LayoutParams.MATCH_PARENT;
+//         params.height = FrameLayout.LayoutParams.MATCH_PARENT;
+//         mDraggablePanel.getDraggableView().setLayoutParams(params);
+//         mDraggablePanel.getDraggableView().requestLayout();
+//         mDraggablePanel.getDraggableView().setTopViewHeight(ScreenUtil.getScreenHeight(getActivity()));
+//         mDraggablePanel.getDraggableView().setTouchEnabled(false);
+//         mDraggablePanel.setClickToMaximizeEnabled(false);
+
+         if (mDraggablePanel.isMinimized()) {
+            new Handler().postDelayed(new Runnable() {
+               @Override
+               public void run() {
+                  if (getActivity() == null) {
+                     return;
+                  }
+                  mDraggablePanel.maximize();
+
+                  new Handler().postDelayed(new Runnable() {
+                     @Override
+                     public void run() {
+                        if (getActivity() == null) {
+                           return;
+                        }
+                        mDraggablePanel.setFullScreen(true);
+
+                     }
+                  }, 500);
+
+
+               }
+            }, 250);
+         } else {
+            mDraggablePanel.setFullScreen(true);
+         }
+
          Log.i("test", "VODFragment.adjustByConfiguration() landscape");
 
          ScreenUtil.hideSystemUI(getActivity().getWindow());
       } else {
-         final FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) mDraggablePanel.getDraggableView().getLayoutParams();
-         //         params.width = FrameLayout.LayoutParams.MATCH_PARENT;
-         params.height = -1;
-         mDraggablePanel.getDraggableView().setLayoutParams(params);
-         mDraggablePanel.getDraggableView().requestLayout();
-
-         mDraggablePanel.setTopViewHeight(ScreenUtil.getPortraitVideoHeight(getActivity()));
-         mDraggablePanel.getDraggableView().setTopViewHeight(ScreenUtil.getPortraitVideoHeight(getActivity()));
-         mDraggablePanel.getDraggableView().getBottomView().setVisibility(View.VISIBLE);
-         mDraggablePanel.getDraggableView().setTouchEnabled(true);
-         mDraggablePanel.setClickToMaximizeEnabled(true);
-         Log.i("test", "VODFragment.adjustByConfiguration() portrait");
+         ScreenUtil.showSystemUI(getActivity().getWindow());
+         mDraggablePanel.setFullScreen(false);
+//         final FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) mDraggablePanel.getDraggableView().getLayoutParams();
+//         //         params.width = FrameLayout.LayoutParams.MATCH_PARENT;
+//         params.height = -1;
+//         mDraggablePanel.getDraggableView().setLayoutParams(params);
+//         mDraggablePanel.getDraggableView().requestLayout();
+//
+//         mDraggablePanel.setTopViewHeight(ScreenUtil.getPortraitVideoHeight(getActivity()));
+//         mDraggablePanel.getDraggableView().setTopViewHeight(ScreenUtil.getPortraitVideoHeight(getActivity()));
+//         mDraggablePanel.getDraggableView().getBottomView().setVisibility(View.VISIBLE);
+//         mDraggablePanel.getDraggableView().setTouchEnabled(true);
+//         mDraggablePanel.setClickToMaximizeEnabled(true);
+//         Log.i("test", "VODFragment.adjustByConfiguration() portrait");
          if (isMinimizedInPortrait) {
             new Handler().postDelayed(new Runnable() {
                @Override
@@ -74,11 +110,8 @@ public class VODFragment extends Fragment {
                      return;
                   }
                   mDraggablePanel.minimize();
-                  ScreenUtil.showSystemUI(getActivity().getWindow());
                }
             }, 250);
-         } else {
-            ScreenUtil.showSystemUI(getActivity().getWindow());
          }
       }
    }
@@ -137,9 +170,9 @@ public class VODFragment extends Fragment {
    @Override
    public void onConfigurationChanged(Configuration newConfig) {
       super.onConfigurationChanged(newConfig);
-      final View top = mDraggablePanel.getDraggableView().getTopView();
-      final View bottom = mDraggablePanel.getDraggableView().getBottomView();
-      final Transformer transformer = mDraggablePanel.getDraggableView().getTransformer();
+//      final View top = mDraggablePanel.getDraggableView().getTopView();
+//      final View bottom = mDraggablePanel.getDraggableView().getBottomView();
+//      final Transformer transformer = mDraggablePanel.getDraggableView().getTransformer();
       final int screenHeight = ScreenUtil.getScreenHeight(getActivity());
       final int screenWidth = ScreenUtil.getScreenWidth(getActivity());
       adjustByConfiguration(newConfig.orientation);
