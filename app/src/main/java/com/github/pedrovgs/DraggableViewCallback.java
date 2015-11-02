@@ -16,6 +16,7 @@
 package com.github.pedrovgs;
 
 import android.support.v4.widget.ViewDragHelper;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -62,6 +63,7 @@ class DraggableViewCallback extends MyViewDragHelper.Callback {
    public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
       if (draggableView.isDragViewAtBottom()) {
          draggableView.changeDragViewViewAlpha();
+         Log.i("test", "DraggableView.onViewPositionChanged()");
       } else {
          draggableView.restoreAlpha();
          draggableView.changeDragViewScale();
@@ -69,6 +71,7 @@ class DraggableViewCallback extends MyViewDragHelper.Callback {
          draggableView.changeSecondViewAlpha();
          draggableView.changeSecondViewPosition();
          draggableView.changeBackgroundAlpha();
+         Log.i("test", "DraggableView.onViewPositionChanged()");
       }
    }
 
